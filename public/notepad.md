@@ -4,3 +4,18 @@ CREATE TABLE link_tags (
     "tagId" INTEGER REFERENCES tags(id),
     UNIQUE ("linkId", "tagId")
 );
+
+CREATE TABLE links (
+    id SERIAL PRIMARY KEY,
+    link VARCHAR(255) UNIQUE,
+    "clickCount" INTEGER,
+    comment TEXT,
+    "dateShared" DATE NOT NULL
+);
+
+CREATE TABLE tags (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL
+);
+
+curl http://localhost:8080/api/links -X POST

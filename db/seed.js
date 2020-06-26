@@ -1,11 +1,22 @@
-const {client} = require("./index");
+const {
+    client,
+    getAllLinks,
+    createLink,
+    updateLink,
+    createTag,
+    createLinkTag,
+    addTagsToLink,
+    getLinkById,
+    getLinksByTagName,
+    getAllTags
+} = require("./index");
 
 async function dropTables() {
     try {
         await client.query(`
-        DROP TABLE IF EXISTS links;
-        DROP TABLE IF EXISTS tags;
-        DROP TABLE IF EXISTS link_tags;
+            DROP TABLE IF EXISTS links CASCADE;
+            DROP TABLE IF EXISTS tags CASCADE;
+            DROP TABLE IF EXISTS link_tags CASCADE;
         `);
     } catch (error) {
         console.error("Error dropping tables!");
@@ -46,6 +57,17 @@ async function createTables() {
     }
 };
 
+// async function createInitialLinks() {
+//     try {
+//         const google = await createLink({
+//             link: "http://www.google.com/"
+//         })
+//     } catch (error) {
+//         console.log("Error creating initial links!");
+//         throw error;
+//     }
+// }
+
 async function rebuildDB() {
     try {
         client.connect();
@@ -58,4 +80,19 @@ async function rebuildDB() {
     }
 }
 
-// rebuildDB().then(() => client.end()).catch(console.error("Error finalizing!"));
+async function testDB() {
+    try {
+        console.log("Calling getAllLinks");
+        const links = await getAllLinks();
+        console.log("Result: ", links);
+    } catch (error) {
+        console.error("Error testing DB");
+        throw error;
+    }
+}
+
+rebuildDB()
+    .then(testDB)
+    .catch(console.error)
+    .finally(() => client.end());
+
