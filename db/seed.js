@@ -29,10 +29,10 @@ async function createTables() {
         await client.query(`
         CREATE TABLE links (
             id SERIAL PRIMARY KEY,
-            link VARCHAR(255) UNIQUE,
+            url VARCHAR(255) UNIQUE,
             "clickCount" INTEGER,
-            comment TEXT,
-            "dateShared" DATE NOT NULL
+            comment TEXT NOT NULL,
+            "dateShared" DATE
         );
         `)
 
@@ -57,16 +57,17 @@ async function createTables() {
     }
 };
 
-// async function createInitialLinks() {
-//     try {
-//         const google = await createLink({
-//             link: "http://www.google.com/"
-//         })
-//     } catch (error) {
-//         console.log("Error creating initial links!");
-//         throw error;
-//     }
-// }
+async function createInitialLinks() {
+    try {
+        const google = await createLink({
+            url: "http://www.google.com/",
+            comment: "Search engine!"
+        })
+    } catch (error) {
+        console.log("Error creating initial links!");
+        throw error;
+    }
+}
 
 async function rebuildDB() {
     try {
@@ -74,6 +75,7 @@ async function rebuildDB() {
 
         await dropTables();
         await createTables();
+        await createInitialLinks();
     } catch (error) {
         console.error("Error during rebuilding database!");
         throw error;

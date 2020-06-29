@@ -1,0 +1,9 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.link-card {
+    padding: 8px;
+    border: solid 1px black;
+    margin: 8px;
+}

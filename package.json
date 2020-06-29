@@ -3,16 +3,22 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "seed:dev": "nodemon ./db/seed.js",
-    "start": "node ./index.js",
-    "start:dev": "nodemon ./index.js"
+    "postinstall": "npm run client:build",
+    "client:dev": "react-scripts start",
+    "client:build": "react-scripts build",
+    "server:dev": "nodemon index.js",
+    "db:build": "node ./db/seed.js",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "morgan": "^1.10.0",
     "pg": "^8.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -22,5 +28,17 @@
   "devDependencies": {
     "nodemon": "^2.0.4"
   },
-  "description": ""
+  "description": "",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

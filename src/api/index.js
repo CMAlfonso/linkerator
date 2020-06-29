@@ -1,22 +1,12 @@
-const express = require("express");
-const apiRouter = express.Router();
+import axios from "axios";
 
-apiRouter.use((req, res, next) => {
-    if (req.link) {
-        console.log("Link is set:", req.user);
+export async function fetchData() {
+    try {
+        const {data} = await axios.get("http://localhost:8080");
+
+        return data;
+    } catch (error) {
+        console.error("Error fetching data!");
+        throw error;
     }
-
-    next();
-})
-
-const linksRouter = require("./links");
-apiRouter.use("./links", linksRouter);
-
-const tagsRouter = require('./tags');
-apiRouter.use('/tags', tagsRouter);
-
-apiRouter.use((error, rep, res, next) => {
-    res.send(error);
-})
-
-module.exports = apiRouter;
+}

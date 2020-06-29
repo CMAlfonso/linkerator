@@ -1,21 +1,23 @@
-require('dotenv').config();
+import React from "react";
+import ReactDOM from "react-dom";
 
-const PORT = 8080;
-const express = require("express");
-const server = express();
+import './index.css';
 
-const bodyParser = require('body-parser');
-server.use(bodyParser.json());
+import {
+    NewLinkForm,
+    SearchBar,
+    SearchResults
+} from "./components";
 
-const morgan = require('morgan');
-server.use(morgan('dev'));
+const App = () => {
+    return (
+        <div>
+            <h1>The Great Linkerator</h1>
+            <NewLinkForm />
+            <SearchBar />
+            <SearchResults />
+        </div>
+    )
+}
 
-const apiRouter = require('./api');
-server.use('/api', apiRouter);
-
-const {client} = require("../db");
-client.connect();
-
-server.listen(PORT, () => {
-  console.log('The server is up on port', PORT)
-});
+ReactDOM.render(<App />, document.getElementById("root"));

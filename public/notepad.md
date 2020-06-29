@@ -19,3 +19,5 @@ CREATE TABLE tags (
 );
 
 curl http://localhost:8080/api/links -X POST
+
+curl http://localhost:8080 -X POST -H 'Content-Type: application/json' -d '{"url": "http://reddit.com", "comment": "reddit"}' 

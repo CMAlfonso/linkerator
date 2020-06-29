@@ -5,7 +5,7 @@ const client = new Client('postgres://localhost:5432/linkerator:dev');
 async function getAllLinks() {
     try {
         const {rows: linkIds} = await client.query(`
-        SELECT id, link, "clickCount", comment, "dateShared"
+        SELECT *
         FROM links;
         `);
 
@@ -21,20 +21,19 @@ async function getAllLinks() {
 }
 
 async function createLink({
-    link,
-    clickCount,
+    url,
     comment,
     dateShared
 }) {
     try {
-        const {rows: [url]} = await client.query(`
-        INSERT INTO links(link, "clickCount", comment, "dateShared")
-        VALUES($1, $2, $3, $4)
-        ON CONFLICT (link) DO NOTHING
+        const {rows: [link]} = await client.query(`
+        INSERT INTO links(url, comment, "dateShared")
+        VALUES($1, $2, $3)
+        ON CONFLICT (url) DO NOTHING
         RETURNING *;
-        `, [link, clickCount, comment, dateShared]);
+        `, [url, comment, dateShared]);
 
-        return url;
+        return link;
     } catch (error) {
         console.error("Error creating link!");
         throw error;
@@ -51,14 +50,14 @@ async function updateLink(id, fields = {}) {
     }
 
     try {
-        const {rows: [url]} = await client.query(`
+        const {rows: [link]} = await client.query(`
         UPDATE users
         SET ${setString}
         WHERE id=${id}
         RETURNING *;
         `, Object.values(fields));
 
-        return url;
+        return link;
     } catch (error) {
         console.error("Error updating link!");
         throw error;
@@ -123,13 +122,13 @@ async function addTagsToLink(linkId, tagList) {
 
 async function getLinkById(linkId) {
     try {
-        const { rows: [ urls ]  } = await client.query(`
+        const { rows: [ link ]  } = await client.query(`
           SELECT *
           FROM links
           WHERE id=$1;
         `, [linkId]);
   
-        if (!url) {
+        if (!link) {
           throw {
             name: "LinkNotFoundError",
             message: "Could not find a link with that linkId"
@@ -143,9 +142,9 @@ async function getLinkById(linkId) {
           WHERE link_tags."linkId"=$1;
         `, [linkId])
     
-        url.tags = tags;
+        link.tags = tags;
     
-        return url;
+        return link;
       } catch (error) {
         throw error;
       }
